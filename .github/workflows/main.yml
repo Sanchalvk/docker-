@@ -31,11 +31,11 @@ jobs:
       
       - name: Build Docker Image
         run: |
-          docker build -t docker/github_action_docker:latest . # Build the image, '.' is important
+          docker build -t sanchalkhedkar/newspringboot:latest . # Build the image, '.' is important
 
       - name: Push Docker Image
         run: |
-          docker push docker/github_action_docker:latest # Push the tagged image
+          docker push sanchalkhedkar/newspringboot # Push the tagged image
 
       - name: Log out from Docker Hub
         run: docker logout # Log out from Docker Hub
