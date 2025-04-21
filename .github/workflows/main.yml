@@ -42,5 +42,4 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}:latest
 
-      - name: Output image name
-        run: echo "Image pushed: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}"
+    
