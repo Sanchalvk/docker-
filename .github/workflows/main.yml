@@ -23,9 +23,12 @@ jobs:
           SANITIZED_REPO_NAME=$(echo "$RAW_REPO_NAME" | sed 's/-*$//')
           echo "REPO_NAME=$SANITIZED_REPO_NAME" >> $GITHUB_ENV
 
-      - name: Manual Docker Login
-        run: |
-          docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_PASSWORD }}"
+    #  - name: Manual Docker Login
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
