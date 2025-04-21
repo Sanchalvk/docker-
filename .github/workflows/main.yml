@@ -15,15 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: "17" # Or your project's Java version.  Use 17 to match.
+          java-version: "21"
           distribution: "temurin"
 
       - name: Build with Maven Wrapper
         run: |
-          cd demoJavaProject # Navigate to the project directory
-          ls -al # Debug: List files in the current directory
-          chmod +x ./mvnw # Make sure the wrapper is executable
+          cd demoJavaProject
+          ls -al
+          chmod +x ./mvnw
           ./mvnw clean package -DskipTests
