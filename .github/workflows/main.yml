@@ -1,4 +1,4 @@
-name: Build and Dockerize
+name: Build and Push to Docker Hub
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-docker:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,13 +26,17 @@ jobs:
           SANITIZED_REPO_NAME=$(echo "$RAW_REPO_NAME" | sed 's/-*$//')
           echo "REPO_NAME=$SANITIZED_REPO_NAME" >> $GITHUB_ENV
 
-      - name: Build Docker image
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: demoJavaProject
-          push: false
-          tags: ${{ github.actor }}/${{ env.REPO_NAME }}:${{ github.sha }}
-
-      - name: Tag Docker image as latest
-        run: |
-          docker tag ${{ github.actor }}/${{ env.REPO_NAME }}:${{ github.sha }} ${{ github.actor }}/${{ env.REPO_NAME }}:latest
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}:latest
