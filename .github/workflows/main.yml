@@ -23,17 +23,16 @@ jobs:
           SANITIZED_REPO_NAME=$(echo "$RAW_REPO_NAME" | sed 's/-*$//')
           echo "REPO_NAME=$SANITIZED_REPO_NAME" >> $GITHUB_ENV
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Build Docker Image
+        run: |
+          docker build -t shaikbyte/github_action_docker:latest . # Build the image, '.' is important
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .  # Path to the directory containing your Dockerfile.  "." for the root of the repo
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+      - name: Push Docker Image
+        run: |
+          docker push shaikbyte/github_action_docker:latest # Push the tagged image
+
+      - name: Log out from Docker Hub
+        run: docker logout # Log out from Docker Hub
