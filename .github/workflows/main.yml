@@ -21,16 +21,14 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Build with Maven Wrapper
-        run: |
-          cd demoJavaProject
-          ls -al
-          chmod +x ./mvnw
-          ./mvnw clean package -DskipTests
-
       - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: demoJavaProject  # Changed context to demoJavaProject
+          push: false # Set to false, we will handle the tag
+          tags: ${{ github.repository }}:${{ github.sha }}
+      - name: Tag Docker image
         run: |
-          cd demoJavaProject
-          docker build -t .
-          docker tag latest
+          docker tag ${{ github.repository }}:${{ github.sha }} ${{ github.repository }}:latest
+
 
