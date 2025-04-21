@@ -29,4 +29,3 @@ jobs:
           ./mvnw clean package -DskipTests \
             -Dmaven.compiler.source=17 \  # Add compiler source and target
             -Dmaven.compiler.target=17    # to ensure Java 17 compatibility
-          
