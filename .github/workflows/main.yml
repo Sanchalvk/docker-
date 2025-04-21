@@ -26,6 +26,4 @@ jobs:
           cd demoJavaProject # Navigate to the project directory
           ls -al # Debug: List files in the current directory
           chmod +x ./mvnw # Make sure the wrapper is executable
-          ./mvnw clean package -DskipTests \
-            -Dmaven.compiler.source=17 \  # Add compiler source and target
-            -Dmaven.compiler.target=17    # to ensure Java 17 compatibility
+          ./mvnw clean package -DskipTests
