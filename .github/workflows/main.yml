@@ -1,4 +1,4 @@
-name: Build and Push to Docker Hub
+name: Build and Push to ECR
 
 on:
   push:
@@ -17,23 +17,35 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Extract sanitized repo name
         run: |
           RAW_REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
           SANITIZED_REPO_NAME=$(echo "$RAW_REPO_NAME" | sed 's/-*$//')
           echo "REPO_NAME=$SANITIZED_REPO_NAME" >> $GITHUB_ENV
 
-      - name: Log in to Docker Hub
+      - name: Log in to ECR
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          ecr: auto
+          logout: true
+        env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.6-7/x64
+          JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.6-7/x64
+          REPO_NAME: docker
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image to ECR
         uses: docker/build-push-action@v5
         with:
           context: demoJavaProject
           push: true
+          repository: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.REPO_NAME }}
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}:latest
+            ${{ github.sha }}
+            latest
