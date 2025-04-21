@@ -32,7 +32,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push shaikbyte/github_action_docker:latest # Push the tagged image
+          docker push docker/github_action_docker:latest # Push the tagged image
 
       - name: Log out from Docker Hub
         run: docker logout # Log out from Docker Hub
