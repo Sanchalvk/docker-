@@ -35,7 +35,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push sanchalkhedkar/newspringboot # Push the tagged image
+            docker push sanchalkhedkar/newspringboot
 
       - name: Log out from Docker Hub
         run: docker logout # Log out from Docker Hub
