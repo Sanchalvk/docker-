@@ -2,7 +2,7 @@ FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
-# Copy the Java source file to the correct location
+# Explicitly copy the Java source file using a path relative to the Dockerfile
 COPY ./demoJavaProject/src/main/java/springsimple_demo/demoJavaProject/DemoJavaProjectApplication.java /app/DemoJavaProjectApplication.java
 
 # Compile the Java source file
