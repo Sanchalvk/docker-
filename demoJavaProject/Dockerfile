@@ -1,14 +1,14 @@
-# # ---- Stage 1: Build ----
+# ---- Stage 1: Build ----
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the pom.xml and source code into the container
-COPY demoJavaProject/pom.xml .  # Copy the Maven pom.xml file
-COPY demoJavaProject/src ./src  # Copy the source code into the container
+# Copy the pom.xml and the source code into the container
+COPY ./demoJavaProject/pom.xml ./ 
+COPY ./demoJavaProject/src ./src
 
-# List files for debugging purposes (optional, remove after successful build)
+# Debugging step: list the contents of the app directory
 RUN ls -al /app
 
 # Run Maven to clean, compile, and package the project into a JAR file
@@ -28,4 +28,3 @@ EXPOSE 8080
 
 # Run the application using the JAR file
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
