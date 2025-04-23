@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the pom.xml and the source code into the container
 COPY ./demoJavaProject/pom.xml ./ 
-COPY ./demoJavaProject/src ./src
+COPY ./demoJavaProject/src ./
 
 # Debugging step: list the contents of the app directory
 RUN ls -al /app
