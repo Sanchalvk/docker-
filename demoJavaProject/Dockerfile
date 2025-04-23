@@ -6,7 +6,7 @@ WORKDIR /app
 RUN mkdir -p /app/springsimple_demo/demoJavaProject
 
 # Copy the Java source file
-COPY demoJavaProject/src/main/java/springsimple_demo/demoJavaProject/DemoJavaProjectApplication.java /app/springsimple_demo/demoJavaProject/DemoJavaProjectApplication.java
+COPY ./demoJavaProject/src/main/java/springsimple_demo/demoJavaProject/DemoJavaProjectApplication.java /app/springsimple_demo/demoJavaProject/DemoJavaProjectApplication.java
 
 # Compile the Java source file
 RUN javac /app/springsimple_demo/demoJavaProject/DemoJavaProjectApplication.java
