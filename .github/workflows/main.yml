@@ -37,7 +37,7 @@ jobs:
         run: |
           cd ./demoJavaProject
           docker build -t $DOCKER_REPO:$VERSION .
-          docker tag $DOCKER_REPO:$VERSION $DOCKER_REPO:latest
+          #docker tag $DOCKER_REPO:$VERSION $DOCKER_REPO:latest
 
       - name: Log in to Docker Hub
         run: echo "dckr_pat_yC7BqB9FPf8d_ZT9M_A4dktjrWo" | docker login -u "sanchalkhedkar" --password-stdin
@@ -45,4 +45,4 @@ jobs:
       - name: Push Docker images
         run: |
           docker push $DOCKER_REPO:$VERSION
-          docker push $DOCKER_REPO:latest
+          #docker push $DOCKER_REPO:latest
