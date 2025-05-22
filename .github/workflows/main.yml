@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-       -'v*.*.*'
+       -'Docker *.*.*'
 jobs:
   build:
     runs-on: ubuntu-latest
