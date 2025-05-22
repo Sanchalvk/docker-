@@ -1,0 +1,46 @@
+name: Docker Image Build with Version Tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_REPO: sanchalkhedkar/dockerjava
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Extract version from pom.xml
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Debug - Show extracted version
+        run: echo "Extracted version is $VERSION"
+
+      - name: Build Docker image
+        run: |
+          docker build -t $DOCKER_REPO:$VERSION .
+          docker tag $DOCKER_REPO:$VERSION $DOCKER_REPO:latest
+
+      - name: Log in to Docker Hub
+        run: echo "dckr_pat_yC7BqB9FPf8d_ZT9M_A4dktjrWo" | docker login -u "sanchalkhedkar" --password-stdin
+
+      - name: Push Docker images
+        run: |
+          docker push $DOCKER_REPO:$VERSION
+          docker push $DOCKER_REPO:latest
