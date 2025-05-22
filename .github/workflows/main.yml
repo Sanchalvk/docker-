@@ -25,7 +25,7 @@ jobs:
       - name: Extract version from pom.xml
         id: get_version
         run: |
-          cd docker-/demoJavaProject
+          cd ./demoJavaProject
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "VERSION=$VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
