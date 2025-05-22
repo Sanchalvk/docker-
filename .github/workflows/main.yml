@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_REPO: sanchalkhedkar/dockerjava
+      DOCKER_REPO: sanchalkhedkar/asas
 
     steps:
       - name: Checkout code
