@@ -29,7 +29,8 @@ jobs:
           cd ./demoJavaProject
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "VERSION=$VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          APP_VERSION="TIMP-API-$VERSION"  # Prefix TIMP-API to the version
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
       - name: Debug - Show extracted version
         run: echo "Extracted version is $VERSION"
