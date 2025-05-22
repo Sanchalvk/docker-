@@ -3,9 +3,10 @@ name: Docker Image Build with Version Tag
 on:
   push:
     branches:
-      - main
+      - main  # Runs on pushes to the main branch
     tags:
-       -'Docker *.*.*'
+      - 'Docker*.*.*'  # Only runs on versioned tags like Docker1.0.0, Docker2.0.0, etc.
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,23 +27,45 @@ jobs:
       - name: Extract version from pom.xml
         id: get_version
         run: |
+          # Navigate to the correct directory if the project is inside a subfolder
           cd ./demoJavaProject
+          
+          # Extract version from pom.xml
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=$VERSION"
-          APP_VERSION="TIMP-API-$VERSION"  # Prefix TIMP-API to the version
-          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          
+          # Debugging: Print the extracted version
+          echo "Extracted version: $VERSION"
+          
+          # If the version is empty, exit with an error
+          if [ -z "$VERSION" ]; then
+            echo "Error: Version extraction failed."
+            exit 1
+          fi
 
-      - name: Debug - Show extracted version
-        run: echo "Extracted version is $VERSION"
+          # Add prefix 'TIMP-API-' to the extracted version
+          APP_VERSION="TIMP-API-$VERSION"  # Prefix TIMP-API to the version
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV  # Store the version as an environment variable
+          
+          # Debugging: Print the final version that will be used for the Docker tag
+          echo "Using Docker image tag: $APP_VERSION"
 
       - name: Build Docker image
         run: |
           cd ./demoJavaProject
-          docker build -t $DOCKER_REPO:$VERSION .
+          
+          # Ensure that APP_VERSION is not empty
+          if [ -z "$APP_VERSION" ]; then
+            echo "Error: APP_VERSION is empty."
+            exit 1
+          fi
+
+          # Build the Docker image with the version as the tag
+          docker build -t $DOCKER_REPO:$APP_VERSION .
 
       - name: Log in to Docker Hub
         run: echo "dckr_pat_yC7BqB9FPf8d_ZT9M_A4dktjrWo" | docker login -u "sanchalkhedkar" --password-stdin
 
-      - name: Push Docker images
+      - name: Push Docker image
         run: |
-          docker push $DOCKER_REPO:$VERSION
+          # Push the Docker image with the tag
+          docker push $DOCKER_REPO:$APP_VERSION
